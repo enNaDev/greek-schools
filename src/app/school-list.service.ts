@@ -23,11 +23,13 @@ export interface School {
   zip_code: string;
 }
 
-Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: 'root' })
 export class SchoolListService {
   private readonly http = inject(HttpClient);
 
   getSchools() {
-    return this.http.get<School[]>('https://data.gov.gr/api/v1/query/minedu_schools').pipe(tap((res) => console.log(res)));
+    return this.http
+      .get<School[]>('https://data.gov.gr/api/v1/query/minedu_schools')
+      .pipe(tap((res) => console.log(res)));
   }
 }
