@@ -4,9 +4,9 @@ import { School, SchoolListService } from './school-list.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css',
+  imports: [RouterOutlet],
 })
 export class App {
   private readonly schoolListService = inject(SchoolListService);
