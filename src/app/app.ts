@@ -1,17 +1,8 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Card } from 'primeng/card';
-import { IconField } from 'primeng/iconfield';
-import { InputIcon } from 'primeng/inputicon';
-import { InputText } from 'primeng/inputtext';
-import { MultiSelect } from 'primeng/multiselect';
-import { Skeleton } from 'primeng/skeleton';
-import { TableModule } from 'primeng/table';
-import { Tag } from 'primeng/tag';
 import { finalize, forkJoin, tap } from 'rxjs';
-import { MetaData, School, SchoolListService } from './services/school-list.service';
 import { MetaDataComponent } from './components/metadata/metadata';
 import { SchoolList } from './components/school-list/school-list';
+import { MetaData, School, SchoolListService } from './services/school-list.service';
 
 type MetaDataFields = MetaData['fields'];
 
@@ -20,25 +11,11 @@ interface Field {
   title: string;
 }
 
-type SchoolKey = keyof School & string;
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.scss',
-  imports: [
-    FormsModule,
-    Card,
-    TableModule,
-    Tag,
-    IconField,
-    InputText,
-    InputIcon,
-    MultiSelect,
-    Skeleton,
-    MetaDataComponent,
-    SchoolList,
-  ],
+  imports: [MetaDataComponent, SchoolList],
 })
 export class App implements OnInit {
   private readonly schoolListService = inject(SchoolListService);
