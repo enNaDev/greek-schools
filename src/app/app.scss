@@ -1,0 +1,14 @@
+.table-sticky-wrap {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+
+  .p-datatable {
+    height: 100%;
+  }
+
+  .p-datatable-wrapper {
+    flex: 1 1 auto;
+  }
+}

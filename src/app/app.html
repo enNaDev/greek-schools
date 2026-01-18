@@ -19,7 +19,7 @@
     </p-card>
   }
   
-  <div class="card">
+  <div class="table-sticky-wrap">
     <p-table
       #dt2
       [value]="schools()"
@@ -28,7 +28,8 @@
       [loading]="loading()"
       [paginator]="true"
       [globalFilterFields]="globalFilterFields()"
-      [tableStyle]="{ 'min-width': '75rem' }"
+      [scrollable]="true"
+      scrollHeight="flex"
     >
       <ng-template #caption>
         <div class="flex">

@@ -23,7 +23,7 @@ type SchoolKey = keyof School & string;
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
-  styleUrl: './app.css',
+  styleUrl: './app.scss',
   imports: [
     FormsModule,
     Card,
