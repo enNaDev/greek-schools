@@ -10,7 +10,8 @@
   scrollHeight="flex"
 >
   <ng-template #caption>
-    <div class="flex">
+    <div class="flex align-center">
+      <div>Αποτελέσματα: {{ (dt2.filteredValue?.length ?? schools().length) }} από {{ schools().length }}</div>
       <p-iconfield iconPosition="left" class="ml-auto">
         <p-inputicon>
           <i class="pi pi-search"></i>
