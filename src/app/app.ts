@@ -1,10 +1,10 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Card } from 'primeng/card';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
 import { MultiSelect } from 'primeng/multiselect';
-import { Select } from 'primeng/select';
 import { Skeleton } from 'primeng/skeleton';
 import { TableModule } from 'primeng/table';
 import { Tag } from 'primeng/tag';
@@ -18,11 +18,24 @@ interface Field {
   title: string;
 }
 
+type SchoolKey = keyof School & string;
+type FieldValuesMap = Map<SchoolKey, string[]>;
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',
-  imports: [Card, TableModule, Tag, IconField, InputText, InputIcon, MultiSelect, Select, Skeleton],
+  imports: [
+    FormsModule,
+    Card,
+    TableModule,
+    Tag,
+    IconField,
+    InputText,
+    InputIcon,
+    MultiSelect,
+    Skeleton,
+  ],
 })
 export class App implements OnInit {
   private readonly schoolListService = inject(SchoolListService);
@@ -41,6 +54,39 @@ export class App implements OnInit {
     return lastUpdate ? this.formatDate(lastUpdate) : undefined;
   });
 
+  protected readonly uniqueValuesByField = computed(() => {
+    const cols = this.fields();
+    const schools = this.schools();
+
+    const map = new Map<SchoolKey, string[]>();
+
+    for (const col of cols) {
+      const key = col.name as SchoolKey;
+
+      const uniqueValues = new Set<string>();
+
+      for (const s of schools) {
+        const raw = s[key];
+
+        if (!raw) {
+          continue;
+        }
+
+        const value = String(raw).trim();
+        if (!value) continue;
+
+        uniqueValues.add(value);
+      }
+
+      map.set(
+        key,
+        Array.from(uniqueValues).sort((a, b) => a.localeCompare(b, 'el')),
+      );
+    }
+
+    return map;
+  });
+
   protected readonly globalFilterFields = computed(() => this.fields().map((f) => f.name));
 
   ngOnInit() {
@@ -56,6 +102,10 @@ export class App implements OnInit {
         }),
       )
       .subscribe();
+  }
+
+  optionsForField(name: string): string[] {
+    return this.uniqueValuesByField().get(name as any) ?? [];
   }
 
   private mapMetadataFields(fields: MetaDataFields): Field[] {

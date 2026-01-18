@@ -1,6 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { inject, Injectable } from "@angular/core";
-import { tap } from "rxjs";
+import { inject, Injectable } from '@angular/core';
 
 export interface School {
   area: string; // Περιοχή
@@ -111,8 +110,6 @@ export class SchoolListService {
   }
 
   getSchools() {
-    return this.http
-      .get<School[]>('https://data.gov.gr/api/v1/query/minedu_schools')
-      .pipe(tap((res) => console.log(res)));
+    return this.http.get<School[]>('https://data.gov.gr/api/v1/query/minedu_schools');
   }
 }

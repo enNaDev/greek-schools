@@ -56,13 +56,17 @@
           <th>
             <!-- Α/Α -->
           </th>
-          @for (key of fields(); track key) {
+          @for (col of fields(); track col.name) {
             <th>
-              <p-columnFilter
-                type="text"
-                [field]="key.name"
-                [placeholder]="'Αναζήτηση ανά ' + key.title.toLowerCase()"
-                [ariaLabel]="key.title">
+              <p-columnFilter [field]="col.name" matchMode="in" [showMenu]="false">
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    [options]="optionsForField(col.name)"
+                    [ngModel]="value"
+                    (onChange)="filter($event.value)"
+                    placeholder="Επιλογή..."
+                  />
+                </ng-template>
               </p-columnFilter>
             </th>
           }
