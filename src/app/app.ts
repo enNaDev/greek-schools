@@ -19,7 +19,6 @@ interface Field {
 }
 
 type SchoolKey = keyof School & string;
-type FieldValuesMap = Map<SchoolKey, string[]>;
 
 @Component({
   selector: 'app-root',
