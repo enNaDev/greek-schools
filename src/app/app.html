@@ -1,95 +1,11 @@
 <div class="mb-4 p-8">
-  @if (metaData(); as metaData) {
-    <p-card [header]="metaData.description" class="mb-4">
-      <p class="m-0">
-        @if (lastUpdate(); as lastUpdate) {
-          Τελευταία ενημέρωση: {{ lastUpdate }}
-        }
-      </p>
-      <ng-template #footer>
-        <div class="flex gap-4 mt-1">
-          Πάροχος πληροφοριών:
-          <p-tag severity="info" [rounded]="true">
-            <a href="https://data.gov.gr/datasets/minedu_schools" pButton target="_blank" rel="noopener noreferrer">
-              <span pButtonLabel>{{ metaData.provider.name }}</span>
-            </a>
-          </p-tag>
-        </div>
-      </ng-template>
-    </p-card>
-  }
+  <app-metadata [metaData]="metaData()" />
   
   <div class="table-sticky-wrap">
-    <p-table
-      #dt2
-      [value]="schools()"
-      [rows]="10"
-      [rowsPerPageOptions]="[10, 25, 50]"
-      [loading]="loading()"
-      [paginator]="true"
-      [globalFilterFields]="globalFilterFields()"
-      [scrollable]="true"
-      scrollHeight="flex"
-    >
-      <ng-template #caption>
-        <div class="flex">
-          <p-iconfield iconPosition="left" class="ml-auto">
-            <p-inputicon>
-              <i class="pi pi-search"></i>
-            </p-inputicon>
-            <input
-              pInputText
-              type="text"
-              placeholder="Αναζήτηση"
-              (input)="dt2.filterGlobal($event.target.value, 'contains')"
-            />
-          </p-iconfield>
-        </div>
-      </ng-template>
-      <ng-template #header>
-        <tr>
-          <th>Α/Α</th>
-          @for (key of fields(); track key) {
-            <th>{{ key.title }}</th>
-          }
-        </tr>
-        <tr>
-          <th>
-            <!-- Α/Α -->
-          </th>
-          @for (col of fields(); track col.name) {
-            <th>
-              <p-columnFilter [field]="col.name" matchMode="in" [showMenu]="false">
-                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <p-multiSelect
-                    [options]="optionsForField(col.name)"
-                    [ngModel]="value"
-                    (onChange)="filter($event.value)"
-                    placeholder="Επιλογή..."
-                  />
-                </ng-template>
-              </p-columnFilter>
-            </th>
-          }
-        </tr>
-      </ng-template>
-      <ng-template #body let-rowIndex="rowIndex" let-school>
-        <tr>
-          <td>
-            {{ rowIndex + 1 }}
-          </td>
-          @for (key of fields(); track key) {
-            <td>
-              {{ school[key.name] }}
-            </td>
-          }
-        </tr>
-      </ng-template>
-      <ng-template #emptymessage>
-        <tr>
-          <td colspan="5">Δεν βρέθηκαν σχολεία.</td>
-        </tr>
-      </ng-template>
-    </p-table>
+    <app-school-list
+      [metaData]="metaData()"
+      [fields]="fields()"
+      [schools]="schools()"
+    />
   </div>
 </div>

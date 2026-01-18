@@ -9,7 +9,9 @@ import { Skeleton } from 'primeng/skeleton';
 import { TableModule } from 'primeng/table';
 import { Tag } from 'primeng/tag';
 import { finalize, forkJoin, tap } from 'rxjs';
-import { MetaData, School, SchoolListService } from './school-list.service';
+import { MetaData, School, SchoolListService } from './services/school-list.service';
+import { MetaDataComponent } from './components/metadata/metadata';
+import { SchoolList } from './components/school-list/school-list';
 
 type MetaDataFields = MetaData['fields'];
 
@@ -34,59 +36,22 @@ type SchoolKey = keyof School & string;
     InputIcon,
     MultiSelect,
     Skeleton,
+    MetaDataComponent,
+    SchoolList,
   ],
 })
 export class App implements OnInit {
   private readonly schoolListService = inject(SchoolListService);
 
-  protected readonly metaData = signal<MetaData | undefined>(undefined);
-  protected readonly schools = signal<School[]>([]);
-  protected readonly loading = signal(false);
+  readonly metaData = signal<MetaData | undefined>(undefined);
+  readonly schools = signal<School[]>([]);
+  readonly loading = signal(false);
 
-  protected readonly fields = computed<Field[]>(() => {
+  readonly fields = computed<Field[]>(() => {
     const metaData = this.metaData();
     if (!metaData) return [];
     return this.mapMetadataFields(metaData.fields);
   });
-  protected readonly lastUpdate = computed(() => {
-    const lastUpdate = this.metaData()?.data_last_update;
-    return lastUpdate ? this.formatDate(lastUpdate) : undefined;
-  });
-
-  protected readonly uniqueValuesByField = computed(() => {
-    const cols = this.fields();
-    const schools = this.schools();
-
-    const map = new Map<SchoolKey, string[]>();
-
-    for (const col of cols) {
-      const key = col.name as SchoolKey;
-
-      const uniqueValues = new Set<string>();
-
-      for (const s of schools) {
-        const raw = s[key];
-
-        if (!raw) {
-          continue;
-        }
-
-        const value = String(raw).trim();
-        if (!value) continue;
-
-        uniqueValues.add(value);
-      }
-
-      map.set(
-        key,
-        Array.from(uniqueValues).sort((a, b) => a.localeCompare(b, 'el')),
-      );
-    }
-
-    return map;
-  });
-
-  protected readonly globalFilterFields = computed(() => this.fields().map((f) => f.name));
 
   ngOnInit() {
     forkJoin({
@@ -103,10 +68,6 @@ export class App implements OnInit {
       .subscribe();
   }
 
-  optionsForField(name: string): string[] {
-    return this.uniqueValuesByField().get(name as any) ?? [];
-  }
-
   private mapMetadataFields(fields: MetaDataFields): Field[] {
     return [...fields]
       .sort((a, b) => a.order - b.order)
@@ -114,19 +75,5 @@ export class App implements OnInit {
         name: field.name,
         title: field.title,
       }));
-  }
-
-  private formatDate(input: string): string {
-    // normalize to ISO 8601
-    const iso = input.replace(' ', 'T').replace(/([+-]\d{2})(\d{2})$/, '$1:$2');
-
-    const date = new Date(iso);
-
-    const pad = (n: number) => n.toString().padStart(2, '0');
-
-    return (
-      `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()}, ` +
-      `${pad(date.getHours())}:${pad(date.getMinutes())}`
-    );
   }
 }
