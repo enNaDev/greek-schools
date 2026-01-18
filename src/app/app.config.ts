@@ -10,8 +10,13 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     providePrimeNG({
+      overlayAppendTo: 'body',
       theme: {
         preset: Aura,
+        options: {
+          darkModeSelector: 'false',
+          cssLayer: false,
+        },
       },
     }),
   ],
