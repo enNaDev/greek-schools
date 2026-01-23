@@ -1,17 +1,12 @@
 import { Component, computed, input, signal } from '@angular/core';
 import { Card } from 'primeng/card';
-import { Skeleton } from 'primeng/skeleton';
 import { Tag } from 'primeng/tag';
 import { MetaData } from '../../services/school-list.service';
 
 @Component({
   selector: 'app-metadata',
   templateUrl: './metadata.html',
-  imports: [
-    Card,
-    Tag,
-    Skeleton,
-  ],
+  imports: [Card, Tag],
 })
 export class MetaDataComponent {
   readonly metaData = input.required<MetaData | undefined>();
