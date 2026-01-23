@@ -46,7 +46,10 @@ export class App implements OnInit {
   }
 
   private mapMetadataFields(fields: MetaDataFields): Field[] {
+    const excluded = new Set(['lat', 'lng']);
+    
     return [...fields]
+      .filter((field) => !excluded.has(field.name))
       .sort((a, b) => a.order - b.order)
       .map((field) => ({
         name: field.name,
