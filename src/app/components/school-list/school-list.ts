@@ -29,6 +29,7 @@ export class SchoolList {
   readonly fields = input.required<Field[]>();
   readonly schools = input.required<School[]>();
   readonly loading = input(false);
+  readonly skeletonRows = Array.from({ length: 10 });
 
   readonly visibleColumnNames = signal<string[]>(this.readVisibleColumnsFromStorage());
 

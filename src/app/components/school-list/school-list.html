@@ -2,7 +2,7 @@
   <div class="sticky top-0 h-[90vh] overflow-hidden">
     <p-table
       #dt2
-      [value]="schools()"
+      [value]="loading() ? skeletonRows : schools()"
       [rows]="10"
       [rowsPerPageOptions]="[10, 25, 50]"
       [loading]="loading()"
@@ -72,15 +72,30 @@
       </ng-template>
     
       <ng-template #body let-rowIndex="rowIndex" let-school>
-        <tr>
-          <td>{{ rowIndex + 1 }}</td>
-    
-          @for (key of visibleFields(); track key.name) {
+        @if (loading()) {
+          <!-- Skeleton rows -->
+          <tr>
             <td>
-              {{ school[key.name] }}
+              <p-skeleton [width]="rowIndex % 2 === 0 ? '90%' : '75%'" height="1rem"></p-skeleton>
             </td>
-          }
-        </tr>
+
+            @for (col of visibleFields(); track col.name) {
+              <td>
+                <p-skeleton height="1rem"></p-skeleton>
+              </td>
+            }
+          </tr>
+        } @else {
+          <tr>
+            <td>{{ rowIndex + 1 }}</td>
+      
+            @for (key of visibleFields(); track key.name) {
+              <td>
+                {{ school[key.name] }}
+              </td>
+            }
+          </tr>
+        }
       </ng-template>
     
       <ng-template #emptymessage>

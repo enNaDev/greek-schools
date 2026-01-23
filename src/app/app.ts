@@ -21,7 +21,7 @@ export class App implements OnInit {
 
   readonly metaData = signal<MetaData | undefined>(undefined);
   readonly schools = signal<School[]>([]);
-  readonly loading = signal(false);
+  readonly loading = signal(true);
 
   readonly fields = computed<Field[]>(() => {
     const metaData = this.metaData();
