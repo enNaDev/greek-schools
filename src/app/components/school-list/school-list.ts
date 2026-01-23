@@ -1,4 +1,4 @@
-import { Component, computed, effect, input, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
@@ -8,6 +8,7 @@ import { Skeleton } from 'primeng/skeleton';
 import { TableModule } from 'primeng/table';
 import { MetaData, School } from '../../services/school-list.service';
 import { Card } from 'primeng/card';
+import { TableColumnPreferencesService } from '../../services/table-column-preferences.service';
 
 interface Field {
   name: string;
@@ -23,6 +24,7 @@ type SchoolKey = keyof School & string;
   imports: [FormsModule, TableModule, IconField, InputIcon, InputText, MultiSelect, Skeleton, Card],
 })
 export class SchoolList {
+  private readonly prefs = inject(TableColumnPreferencesService);
   private readonly LS_KEY = 'school-list.visible-columns.v1';
 
   readonly metaData = input.required<MetaData | undefined>();
@@ -31,7 +33,7 @@ export class SchoolList {
   readonly loading = input(false);
   readonly skeletonRows = Array.from({ length: 10 });
 
-  readonly visibleColumnNames = signal<string[]>(this.readVisibleColumnsFromStorage());
+  readonly visibleColumnNames = signal<string[]>(this.prefs.read(this.LS_KEY));
 
   readonly columnToggleOptions = computed(() =>
     this.fields().map((f) => ({ label: f.title, value: f.name })),
@@ -58,7 +60,7 @@ export class SchoolList {
       if (current.length === 0) {
         const init = fields.map((f) => f.name);
         this.visibleColumnNames.set(init);
-        this.writeVisibleColumnsToStorage(init);
+        this.prefs.write(this.LS_KEY, init);
         return;
       }
 
@@ -72,7 +74,7 @@ export class SchoolList {
         this.visibleColumnNames.set(finalValue);
       }
 
-      this.writeVisibleColumnsToStorage(this.visibleColumnNames());
+      this.prefs.write(this.LS_KEY, this.visibleColumnNames());
     });
   }
 
@@ -118,25 +120,6 @@ export class SchoolList {
     }
 
     return map;
-  }
-
-  private readVisibleColumnsFromStorage(): string[] {
-    try {
-      const raw = localStorage.getItem(this.LS_KEY);
-      if (!raw) return [];
-      const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed.filter((x) => typeof x === 'string') : [];
-    } catch {
-      return [];
-    }
-  }
-
-  private writeVisibleColumnsToStorage(names: string[]) {
-    try {
-      localStorage.setItem(this.LS_KEY, JSON.stringify(names));
-    } catch {
-      console.log('could not write in localStorage');
-    }
   }
 
   private arraysEqual(a: string[], b: string[]) {
