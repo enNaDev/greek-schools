@@ -47,11 +47,15 @@ export class SchoolList {
 
   constructor() {
     effect(() => {
-      const allNames = new Set(this.fields().map((f) => f.name));
+      const fields = this.fields();
+
+      if (!fields || fields.length === 0) return;
+
+      const allNames = new Set(fields.map((f) => f.name));
       const current = this.visibleColumnNames();
 
-      if (current.length === 0 && this.fields().length > 0) {
-        const init = this.fields().map((f) => f.name);
+      if (current.length === 0) {
+        const init = fields.map((f) => f.name);
         this.visibleColumnNames.set(init);
         this.writeVisibleColumnsToStorage(init);
         return;
@@ -61,9 +65,8 @@ export class SchoolList {
       const sanitized = current.filter((n) => allNames.has(n));
 
       // If sanitization removed everything, fall back to all columns
-      const finalValue = sanitized.length > 0 ? sanitized : this.fields().map((f) => f.name);
+      const finalValue = sanitized.length > 0 ? sanitized : fields.map((f) => f.name);
 
-      // Avoid loops by only setting when needed
       if (!this.arraysEqual(current, finalValue)) {
         this.visibleColumnNames.set(finalValue);
       }
