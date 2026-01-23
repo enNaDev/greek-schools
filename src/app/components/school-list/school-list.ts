@@ -7,6 +7,7 @@ import { MultiSelect } from 'primeng/multiselect';
 import { Skeleton } from 'primeng/skeleton';
 import { TableModule } from 'primeng/table';
 import { MetaData, School } from '../../services/school-list.service';
+import { Card } from 'primeng/card';
 
 interface Field {
   name: string;
@@ -19,7 +20,7 @@ type SchoolKey = keyof School & string;
   selector: 'app-school-list',
   templateUrl: './school-list.html',
   styleUrls: ['./school-list.scss'],
-  imports: [FormsModule, TableModule, IconField, InputIcon, InputText, MultiSelect, Skeleton],
+  imports: [FormsModule, TableModule, IconField, InputIcon, InputText, MultiSelect, Skeleton, Card],
 })
 export class SchoolList {
   private readonly LS_KEY = 'school-list.visible-columns.v1';

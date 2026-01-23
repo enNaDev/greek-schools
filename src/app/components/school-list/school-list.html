@@ -1,89 +1,93 @@
-<p-table
-  #dt2
-  [value]="schools()"
-  [rows]="10"
-  [rowsPerPageOptions]="[10, 25, 50]"
-  [loading]="loading()"
-  [paginator]="true"
-  [globalFilterFields]="globalFilterFields()"
-  [scrollable]="true"
-  scrollHeight="flex"
->
-  <ng-template #caption>
-    <div class="flex align-center gap-2">
-      <div>
-        Αποτελέσματα: {{ (dt2.filteredValue?.length ?? schools().length) }} από {{ schools().length }}
-      </div>
-
-      <!-- Column toggle -->
-      <p-multiSelect
-        class="ml-auto"
-        [options]="columnToggleOptions()"
-        [ngModel]="visibleColumnNames()"
-        (onChange)="onVisibleColumnsChange($event.value)"
-        placeholder="Στήλες..."
-        [showClear]="false"
-        display="chip"
-      ></p-multiSelect>
-
-      <!-- Global search -->
-      <p-iconfield iconPosition="left">
-        <p-inputicon>
-          <i class="pi pi-search"></i>
-        </p-inputicon>
-        <input
-          pInputText
-          type="text"
-          placeholder="Αναζήτηση"
-          (input)="dt2.filterGlobal($event.target.value, 'contains')"
-        />
-      </p-iconfield>
-    </div>
-  </ng-template>
-
-  <ng-template #header>
-    <tr>
-      <th>Α/Α</th>
-      @for (key of visibleFields(); track key.name) {
-        <th>{{ key.title }}</th>
-      }
-    </tr>
-
-    <tr>
-      <th><!-- Α/Α --></th>
-
-      @for (col of visibleFields(); track col.name) {
-        <th>
-          <p-columnFilter [field]="col.name" matchMode="in" [showMenu]="false">
-            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-              <p-multiSelect
-                [options]="optionsForField(col.name)"
-                [ngModel]="value"
-                (onChange)="filter($event.value)"
-                placeholder="Επιλογή..."
-              />
-            </ng-template>
-          </p-columnFilter>
-        </th>
-      }
-    </tr>
-  </ng-template>
-
-  <ng-template #body let-rowIndex="rowIndex" let-school>
-    <tr>
-      <td>{{ rowIndex + 1 }}</td>
-
-      @for (key of visibleFields(); track key.name) {
-        <td>
-          {{ school[key.name] }}
-        </td>
-      }
-    </tr>
-  </ng-template>
-
-  <ng-template #emptymessage>
-    <tr>
-      <td [attr.colspan]="visibleFields().length + 1">Δεν βρέθηκαν σχολεία.</td>
-    </tr>
-  </ng-template>
-</p-table>
+<p-card>
+  <div class="sticky top-0 h-[90vh] overflow-hidden">
+    <p-table
+      #dt2
+      [value]="schools()"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      [loading]="loading()"
+      [paginator]="true"
+      [globalFilterFields]="globalFilterFields()"
+      [scrollable]="true"
+      scrollHeight="flex"
+    >
+      <ng-template #caption>
+        <div class="flex align-center gap-2">
+          <div>
+            Αποτελέσματα: {{ (dt2.filteredValue?.length ?? schools().length) }} από {{ schools().length }}
+          </div>
+    
+          <!-- Column toggle -->
+          <p-multiSelect
+            class="ml-auto"
+            [options]="columnToggleOptions()"
+            [ngModel]="visibleColumnNames()"
+            (onChange)="onVisibleColumnsChange($event.value)"
+            placeholder="Στήλες..."
+            [showClear]="false"
+            display="chip"
+          ></p-multiSelect>
+    
+          <!-- Global search -->
+          <p-iconfield iconPosition="left">
+            <p-inputicon>
+              <i class="pi pi-search"></i>
+            </p-inputicon>
+            <input
+              pInputText
+              type="text"
+              placeholder="Αναζήτηση"
+              (input)="dt2.filterGlobal($event.target.value, 'contains')"
+            />
+          </p-iconfield>
+        </div>
+      </ng-template>
+    
+      <ng-template #header>
+        <tr>
+          <th>Α/Α</th>
+          @for (key of visibleFields(); track key.name) {
+            <th>{{ key.title }}</th>
+          }
+        </tr>
+    
+        <tr>
+          <th><!-- Α/Α --></th>
+    
+          @for (col of visibleFields(); track col.name) {
+            <th>
+              <p-columnFilter [field]="col.name" matchMode="in" [showMenu]="false">
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    [options]="optionsForField(col.name)"
+                    [ngModel]="value"
+                    (onChange)="filter($event.value)"
+                    placeholder="Επιλογή..."
+                  />
+                </ng-template>
+              </p-columnFilter>
+            </th>
+          }
+        </tr>
+      </ng-template>
+    
+      <ng-template #body let-rowIndex="rowIndex" let-school>
+        <tr>
+          <td>{{ rowIndex + 1 }}</td>
+    
+          @for (key of visibleFields(); track key.name) {
+            <td>
+              {{ school[key.name] }}
+            </td>
+          }
+        </tr>
+      </ng-template>
+    
+      <ng-template #emptymessage>
+        <tr>
+          <td [attr.colspan]="visibleFields().length + 1">Δεν βρέθηκαν σχολεία.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</p-card>
