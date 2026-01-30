@@ -50,28 +50,38 @@
   </p-card>
   
   @if (selectedRegionalUnit(); as selectedRegionalUnit) {
-    <span class="text-sm">
-      Περιφ. Ενότητα:
-      <p-chip
-        class="ml-2"
-        [label]="selectedRegionalUnit"
-        [removable]="true"
-        (onRemove)="removeRegionalUnit()"
-      />
-    </span>
-  }
+    <p-card header="Ενεργά φίλτρα">
+      <div class="flex flex-col gap-2">
+        <span class="text-sm">
+          Περιφ. Ενότητα:
+          <p-chip
+            class="ml-2"
+            [label]="selectedRegionalUnit"
+            [removable]="true"
+            (onRemove)="removeRegionalUnit()"
+          />
+        </span>
+    
+        @if (selectedMunicipalUnits().length > 0) {
+          <span class="text-sm">
+            Δημοτ. Ενότητα:
+            @for (item of selectedMunicipalUnits(); track item) {
+              <p-chip
+                class="ml-2"
+                [label]="item"
+                [removable]="true"
+                (onRemove)="removeMunicipalUnit(item)"
+              />
+            }
+          </span>
+        }
+      </div>
 
-  @if (selectedMunicipalUnits().length > 0) {
-    <span class="text-sm">
-      Δημοτ. Ενότητα:
-      @for (item of selectedMunicipalUnits(); track item) {
-        <p-chip
-          class="ml-2"
-          [label]="item"
-          [removable]="true"
-          (onRemove)="removeMunicipalUnit(item)"
-        />
-      }
-    </span>
+      <ng-template #footer>
+        <div class="flex justify-end">
+          <p-button (click)="clearStepperFilters()">Καραθαρισμός</p-button>
+        </div>
+      </ng-template>
+    </p-card>
   }
 </div>
