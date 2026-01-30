@@ -26,19 +26,18 @@ type SchoolKey = keyof School & string;
 export class SchoolList {
   private readonly prefs = inject(TableColumnPreferencesService);
   private readonly LS_KEY = 'school-list.visible-columns.v1';
+  readonly skeletonRows = Array.from({ length: 10 });
 
   readonly metaData = input.required<MetaData | undefined>();
   readonly fields = input.required<Field[]>();
   readonly schools = input.required<School[]>();
   readonly loading = input(false);
-  readonly skeletonRows = Array.from({ length: 10 });
 
   readonly visibleColumnNames = signal<string[]>(this.prefs.read(this.LS_KEY));
 
   readonly columnToggleOptions = computed(() =>
     this.fields().map((f) => ({ label: f.title, value: f.name })),
   );
-
   readonly visibleFields = computed(() => {
     const all = this.fields();
     const selected = new Set(this.visibleColumnNames());
@@ -46,6 +45,12 @@ export class SchoolList {
     if (selected.size === 0) return all;
 
     return all.filter((f) => selected.has(f.name));
+  });
+  readonly globalFilterFields = computed(() => this.visibleFields().map((f) => f.name));
+  readonly uniqueValuesByField = computed(() => {
+    const cols = this.fields();
+    const schools = this.schools();
+    return this.createMap(cols, schools);
   });
 
   constructor() {
@@ -82,14 +87,6 @@ export class SchoolList {
     if (!names || names.length === 0) return;
     this.visibleColumnNames.set(names);
   }
-
-  readonly globalFilterFields = computed(() => this.visibleFields().map((f) => f.name));
-
-  readonly uniqueValuesByField = computed(() => {
-    const cols = this.fields();
-    const schools = this.schools();
-    return this.createMap(cols, schools);
-  });
 
   optionsForField(name: string): string[] {
     return this.uniqueValuesByField().get(name as any) ?? [];
