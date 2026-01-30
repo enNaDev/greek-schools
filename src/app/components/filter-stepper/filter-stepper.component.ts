@@ -1,4 +1,4 @@
-import { Component, computed, effect, input, signal } from '@angular/core';
+import { Component, computed, effect, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Button } from 'primeng/button';
 import { Card } from 'primeng/card';
@@ -19,6 +19,7 @@ type GreekLocale = 'el' | 'en';
 })
 export class FilterStepper {
   readonly schools = input.required<School[]>();
+  readonly filteredSchoolsChange = output<School[]>();
 
   readonly activeStep = signal(1);
   readonly selectedRegionalUnit = signal<string | null>(null);
@@ -50,6 +51,10 @@ export class FilterStepper {
         this.selectedMunicipalUnits.set([]);
         this.activeStep.set(1);
       }
+    });
+
+    effect(() => {
+      this.filteredSchoolsChange.emit(this.stepperFilteredSchools());
     });
   }
 

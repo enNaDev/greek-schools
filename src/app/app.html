@@ -1,12 +1,12 @@
 <div class="p-8 flex flex-col gap-3">
   <app-metadata [metaData]="metaData()" />
   
-  <app-filter-stepper [schools]="schools()" />
+  <app-filter-stepper [schools]="schools()" (filteredSchoolsChange)="onStepperSchoolsChange($event)" />
 
   <app-school-list
     [metaData]="metaData()"
     [fields]="fields()"
-    [schools]="schools()"
+    [schools]="stepperSchools()"
     [loading]="loading()"
   />
 </div>

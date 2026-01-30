@@ -1,9 +1,9 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { finalize, forkJoin, tap } from 'rxjs';
+import { FilterStepper } from './components/filter-stepper/filter-stepper.component';
 import { MetaDataComponent } from './components/metadata/metadata';
 import { SchoolList } from './components/school-list/school-list';
 import { MetaData, School, SchoolListService } from './services/school-list.service';
-import { FilterStepper } from './components/filter-stepper/filter-stepper.component';
 
 type MetaDataFields = MetaData['fields'];
 
@@ -22,6 +22,7 @@ export class App implements OnInit {
 
   readonly metaData = signal<MetaData | undefined>(undefined);
   readonly schools = signal<School[]>([]);
+  readonly stepperSchools = signal<School[]>([]);
   readonly loading = signal(true);
 
   readonly fields = computed<Field[]>(() => {
@@ -45,8 +46,20 @@ export class App implements OnInit {
       .subscribe();
   }
 
+  onStepperSchoolsChange(filtered: School[]) {
+    this.stepperSchools.set(filtered);
+  }
+
   private mapMetadataFields(fields: MetaDataFields): Field[] {
-    const excluded = new Set(['prefecture', 'school_district', 'district', 'lat', 'lng']);
+    const excluded = new Set([
+      'prefecture',
+      'school_district',
+      'regional_unit',
+      'municipal_unit',
+      'district',
+      'lat',
+      'lng',
+    ]);
 
     return [...fields]
       .filter((field) => !excluded.has(field.name))
