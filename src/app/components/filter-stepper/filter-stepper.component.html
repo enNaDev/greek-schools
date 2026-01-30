@@ -1,0 +1,77 @@
+<div class="flex flex-col gap-3">
+  <p-card>
+    <p-stepper [value]="activeStep()">
+      <p-step-item [value]="1">
+      <p-step>Περιφερειακή Ενότητα</p-step>
+      <p-step-panel>
+        <ng-template #content let-activateCallback="activateCallback">
+          <div class="flex flex-col">
+            <p-select
+              placeholder="Επιλέξτε Περιφερειακή Ενότητα..."
+              class="w-full"
+              [filter]="true"
+              [options]="regionalUnitOptions()"
+              [(ngModel)]="selectedRegionalUnit"
+            ></p-select>
+          </div>
+          <div class="py-6">
+            <p-button
+              label="Next"
+              [disabled]="!selectedRegionalUnit()"
+              (onClick)="activeStep.set(2)"
+            />
+          </div>
+        </ng-template>
+      </p-step-panel>
+    </p-step-item>
+    <p-step-item [value]="2">
+        <p-step>Δημοτική Ενότητα</p-step>
+        <p-step-panel>
+          <ng-template #content let-activateCallback="activateCallback">
+            <div class="flex flex-col">
+              <p-multiSelect
+                placeholder="Επιλέξτε Δημοτική Ενότητα..."
+                class="w-full"
+                display="chip"
+                [filter]="true"
+                [showClear]="true"
+                [disabled]="!selectedRegionalUnit()"
+                [options]="municipalUnitOptions()"
+                [(ngModel)]="selectedMunicipalUnits"
+              ></p-multiSelect>
+            </div>
+            <div class="py-6">
+              <p-button label="Back" severity="secondary" (onClick)="activeStep.set(1)" />
+            </div>
+          </ng-template>
+        </p-step-panel>
+      </p-step-item>
+    </p-stepper>
+  </p-card>
+  
+  @if (selectedRegionalUnit(); as selectedRegionalUnit) {
+    <span class="text-sm">
+      Περιφ. Ενότητα:
+      <p-chip
+        class="ml-2"
+        [label]="selectedRegionalUnit"
+        [removable]="true"
+        (onRemove)="removeRegionalUnit()"
+      />
+    </span>
+  }
+
+  @if (selectedMunicipalUnits().length > 0) {
+    <span class="text-sm">
+      Δημοτ. Ενότητα:
+      @for (item of selectedMunicipalUnits(); track item) {
+        <p-chip
+          class="ml-2"
+          [label]="item"
+          [removable]="true"
+          (onRemove)="removeMunicipalUnit(item)"
+        />
+      }
+    </span>
+  }
+</div>

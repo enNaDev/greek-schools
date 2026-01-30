@@ -3,6 +3,7 @@ import { finalize, forkJoin, tap } from 'rxjs';
 import { MetaDataComponent } from './components/metadata/metadata';
 import { SchoolList } from './components/school-list/school-list';
 import { MetaData, School, SchoolListService } from './services/school-list.service';
+import { FilterStepper } from './components/filter-stepper/filter-stepper.component';
 
 type MetaDataFields = MetaData['fields'];
 
@@ -14,7 +15,7 @@ interface Field {
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
-  imports: [MetaDataComponent, SchoolList],
+  imports: [MetaDataComponent, SchoolList, FilterStepper],
 })
 export class App implements OnInit {
   private readonly schoolListService = inject(SchoolListService);
@@ -45,7 +46,7 @@ export class App implements OnInit {
   }
 
   private mapMetadataFields(fields: MetaDataFields): Field[] {
-    const excluded = new Set(['lat', 'lng']);
+    const excluded = new Set(['prefecture', 'school_district', 'district', 'lat', 'lng']);
 
     return [...fields]
       .filter((field) => !excluded.has(field.name))
