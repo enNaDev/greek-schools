@@ -1,6 +1,13 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { finalize, forkJoin, tap } from 'rxjs';
-import { FilterStepper } from './components/filter-stepper/filter-stepper.component';
+import { FilterStepper } from './components/filter-stepper/components/filter-stepper.component';
+import {
+  applyStepperFilters,
+  cascadeStepperFilters,
+  DEFAULT_STEPPER_FILTERS,
+  sanitizeStepperFilters,
+  StepperFilters,
+} from './components/filter-stepper/utils/stepper-filters';
 import { MetaDataComponent } from './components/metadata/metadata';
 import { SchoolList } from './components/school-list/school-list';
 import { MetaData, School, SchoolListService } from './services/school-list.service';
@@ -23,8 +30,8 @@ export class App implements OnInit {
   readonly metaData = signal<MetaData | undefined>(undefined);
   readonly schools = signal<School[]>([]);
   readonly loading = signal(true);
-  readonly selectedRegionalUnit = signal<string | null>(null);
-  readonly selectedMunicipalUnits = signal<string[]>([]);
+
+  readonly stepperFilters = signal<StepperFilters>(DEFAULT_STEPPER_FILTERS);
 
   readonly fields = computed<Field[]>(() => {
     const metaData = this.metaData();
@@ -32,22 +39,9 @@ export class App implements OnInit {
     return this.mapMetadataFields(metaData.fields);
   });
 
-  readonly stepperFilteredSchools = computed(() => {
-    const regional = this.selectedRegionalUnit();
-    const municipals = this.selectedMunicipalUnits();
-    let list = this.schools();
-
-    if (regional) {
-      list = list.filter((s) => String(s.regional_unit ?? '').trim() === regional);
-    }
-
-    if (municipals.length > 0) {
-      const allowed = new Set(municipals);
-      list = list.filter((s) => allowed.has(String(s.municipal_unit ?? '').trim()));
-    }
-
-    return list;
-  });
+  readonly stepperFilteredSchools = computed(() =>
+    applyStepperFilters(this.schools(), this.stepperFilters()),
+  );
 
   ngOnInit() {
     forkJoin({
@@ -64,18 +58,15 @@ export class App implements OnInit {
       .subscribe();
   }
 
-  setRegionalUnit(value: string | null) {
-    this.selectedRegionalUnit.set(value);
-    if (!value) this.selectedMunicipalUnits.set([]);
-  }
-
-  setMunicipalUnits(values: string[]) {
-    this.selectedMunicipalUnits.set(values ?? []);
+  updateStepperFilters(patch: Partial<StepperFilters>) {
+    this.stepperFilters.update((prev) => {
+      const next = sanitizeStepperFilters({ ...prev, ...patch });
+      return cascadeStepperFilters(prev, next);
+    });
   }
 
   clearStepperFilters() {
-    this.selectedRegionalUnit.set(null);
-    this.selectedMunicipalUnits.set([]);
+    this.stepperFilters.set(DEFAULT_STEPPER_FILTERS);
   }
 
   private mapMetadataFields(fields: MetaDataFields): Field[] {

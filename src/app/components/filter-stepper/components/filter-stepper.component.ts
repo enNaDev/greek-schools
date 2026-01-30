@@ -7,7 +7,8 @@ import { MultiSelect } from 'primeng/multiselect';
 import { Select } from 'primeng/select';
 import { StepperModule } from 'primeng/stepper';
 import { TableModule } from 'primeng/table';
-import { School } from '../../services/school-list.service';
+import { School } from '../../../services/school-list.service';
+import { StepperFilters } from '../utils/stepper-filters';
 
 type SchoolKey = Extract<keyof School, string>;
 type GreekLocale = 'el' | 'en';
@@ -19,12 +20,9 @@ type GreekLocale = 'el' | 'en';
 })
 export class FilterStepper {
   readonly schools = input.required<School[]>();
+  readonly filters = input.required<StepperFilters>();
 
-  readonly selectedRegionalUnit = input<string | null>(null);
-  readonly selectedMunicipalUnits = input<string[]>([]);
-
-  readonly selectedRegionalUnitChange = output<string | null>();
-  readonly selectedMunicipalUnitsChange = output<string[]>();
+  readonly filtersChange = output<Partial<StepperFilters>>();
   readonly clear = output<void>();
 
   readonly activeStep = signal(1);
@@ -32,28 +30,22 @@ export class FilterStepper {
   readonly regionalUnitOptions = computed(() =>
     this.pickUniqueSorted(this.schools(), 'regional_unit'),
   );
-
   readonly municipalUnitOptions = computed(() => {
-    const regional = this.selectedRegionalUnit();
-    const base = regional
-      ? this.schools().filter((s) => this.normalize(s.regional_unit) === regional)
-      : [];
+    const regional = this.filters().regionalUnit;
+    if (!regional) return [];
 
+    const base = this.schools().filter((s) => this.normalize(s.regional_unit) === regional);
     return this.pickUniqueSorted(base, 'municipal_unit');
   });
 
   constructor() {
     effect(() => {
-      if (!this.selectedRegionalUnit()) {
-        this.activeStep.set(1);
-      }
+      if (!this.filters().regionalUnit) this.activeStep.set(1);
     });
   }
 
   goNext() {
-    if (this.selectedRegionalUnit()) {
-      this.activeStep.set(2);
-    }
+    if (this.filters().regionalUnit) this.activeStep.set(2);
   }
 
   goBack() {
@@ -61,16 +53,12 @@ export class FilterStepper {
   }
 
   setRegional(unit: string | null) {
-    this.selectedRegionalUnitChange.emit(unit);
-    if (!unit) this.selectedMunicipalUnitsChange.emit([]);
+    this.filtersChange.emit({ regionalUnit: unit });
+    if (!unit) this.filtersChange.emit({ municipalUnits: [] });
   }
 
   setMunicipals(units: string[]) {
-    this.selectedMunicipalUnitsChange.emit(units ?? []);
-  }
-
-  clearStepperFilters() {
-    this.clear.emit();
+    this.filtersChange.emit({ municipalUnits: units ?? [] });
   }
 
   removeRegionalUnit() {
@@ -78,17 +66,19 @@ export class FilterStepper {
   }
 
   removeMunicipalUnit(value: string) {
-    const next = this.selectedMunicipalUnits().filter((municipalUnit) => municipalUnit !== value);
-    this.selectedMunicipalUnitsChange.emit(next);
+    const next = this.filters().municipalUnits.filter((x) => x !== value);
+    this.filtersChange.emit({ municipalUnits: next });
+  }
+
+  clearStepperFilters() {
+    this.clear.emit();
   }
 
   private pickUniqueSorted(list: School[], key: SchoolKey, locale: GreekLocale = 'el'): string[] {
     const values = new Set<string>();
     for (const item of list) {
-      const normalized = this.normalize(item[key]);
-      if (normalized) {
-        values.add(normalized);
-      }
+      const v = this.normalize(item[key]);
+      if (v) values.add(v);
     }
     return [...values].sort((a, b) => a.localeCompare(b, locale));
   }

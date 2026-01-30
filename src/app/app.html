@@ -3,10 +3,8 @@
 
   <app-filter-stepper
     [schools]="schools()"
-    [selectedRegionalUnit]="selectedRegionalUnit()"
-    [selectedMunicipalUnits]="selectedMunicipalUnits()"
-    (selectedRegionalUnitChange)="setRegionalUnit($event)"
-    (selectedMunicipalUnitsChange)="setMunicipalUnits($event)"
+    [filters]="stepperFilters()"
+    (filtersChange)="updateStepperFilters($event)"
     (clear)="clearStepperFilters()"
   />
 
