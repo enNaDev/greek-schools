@@ -18,16 +18,14 @@ export function applyStepperFilters(schools: School[], f: StepperFilters): Schoo
   const regional = f.regionalUnit;
   const municipals = f.municipalUnits;
 
+  if (!regional || municipals.length === 0) {
+    return [];
+  }
+
   let list = schools;
-
-  if (regional) {
-    list = list.filter((s) => normalize(s.regional_unit) === regional);
-  }
-
-  if (municipals.length > 0) {
-    const allowed = new Set(municipals);
-    list = list.filter((s) => allowed.has(normalize(s.municipal_unit)));
-  }
+  list = list.filter((s) => normalize(s.regional_unit) === regional);
+  const allowed = new Set(municipals);
+  list = list.filter((s) => allowed.has(normalize(s.municipal_unit)));
 
   return list;
 }
