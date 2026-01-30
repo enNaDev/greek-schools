@@ -22,13 +22,31 @@ export class App implements OnInit {
 
   readonly metaData = signal<MetaData | undefined>(undefined);
   readonly schools = signal<School[]>([]);
-  readonly stepperSchools = signal<School[]>([]);
   readonly loading = signal(true);
+  readonly selectedRegionalUnit = signal<string | null>(null);
+  readonly selectedMunicipalUnits = signal<string[]>([]);
 
   readonly fields = computed<Field[]>(() => {
     const metaData = this.metaData();
     if (!metaData) return [];
     return this.mapMetadataFields(metaData.fields);
+  });
+
+  readonly stepperFilteredSchools = computed(() => {
+    const regional = this.selectedRegionalUnit();
+    const municipals = this.selectedMunicipalUnits();
+    let list = this.schools();
+
+    if (regional) {
+      list = list.filter((s) => String(s.regional_unit ?? '').trim() === regional);
+    }
+
+    if (municipals.length > 0) {
+      const allowed = new Set(municipals);
+      list = list.filter((s) => allowed.has(String(s.municipal_unit ?? '').trim()));
+    }
+
+    return list;
   });
 
   ngOnInit() {
@@ -46,8 +64,18 @@ export class App implements OnInit {
       .subscribe();
   }
 
-  onStepperSchoolsChange(filtered: School[]) {
-    this.stepperSchools.set(filtered);
+  setRegionalUnit(value: string | null) {
+    this.selectedRegionalUnit.set(value);
+    if (!value) this.selectedMunicipalUnits.set([]);
+  }
+
+  setMunicipalUnits(values: string[]) {
+    this.selectedMunicipalUnits.set(values ?? []);
+  }
+
+  clearStepperFilters() {
+    this.selectedRegionalUnit.set(null);
+    this.selectedMunicipalUnits.set([]);
   }
 
   private mapMetadataFields(fields: MetaDataFields): Field[] {

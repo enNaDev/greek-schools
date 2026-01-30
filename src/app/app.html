@@ -1,12 +1,19 @@
 <div class="p-8 flex flex-col gap-3">
   <app-metadata [metaData]="metaData()" />
-  
-  <app-filter-stepper [schools]="schools()" (filteredSchoolsChange)="onStepperSchoolsChange($event)" />
+
+  <app-filter-stepper
+    [schools]="schools()"
+    [selectedRegionalUnit]="selectedRegionalUnit()"
+    [selectedMunicipalUnits]="selectedMunicipalUnits()"
+    (selectedRegionalUnitChange)="setRegionalUnit($event)"
+    (selectedMunicipalUnitsChange)="setMunicipalUnits($event)"
+    (clear)="clearStepperFilters()"
+  />
 
   <app-school-list
     [metaData]="metaData()"
     [fields]="fields()"
-    [schools]="stepperSchools()"
+    [schools]="stepperFilteredSchools()"
     [loading]="loading()"
   />
 </div>

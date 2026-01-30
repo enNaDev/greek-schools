@@ -11,14 +11,15 @@
               class="w-full"
               [filter]="true"
               [options]="regionalUnitOptions()"
-              [(ngModel)]="selectedRegionalUnit"
+              [ngModel]="selectedRegionalUnit()"
+              (ngModelChange)="setRegional($event)"
             ></p-select>
           </div>
           <div class="py-6">
             <p-button
               label="Next"
               [disabled]="!selectedRegionalUnit()"
-              (onClick)="activeStep.set(2)"
+              (onClick)="goNext()"
             />
           </div>
         </ng-template>
@@ -37,11 +38,12 @@
                 [showClear]="true"
                 [disabled]="!selectedRegionalUnit()"
                 [options]="municipalUnitOptions()"
-                [(ngModel)]="selectedMunicipalUnits"
+                [ngModel]="selectedMunicipalUnits()"
+                (ngModelChange)="setMunicipals($event)"
               ></p-multiSelect>
             </div>
             <div class="py-6">
-              <p-button label="Back" severity="secondary" (onClick)="activeStep.set(1)" />
+              <p-button (click)="clearStepperFilters()">Καραθαρισμός</p-button>
             </div>
           </ng-template>
         </p-step-panel>
