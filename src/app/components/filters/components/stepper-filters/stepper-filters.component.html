@@ -8,6 +8,8 @@
             placeholder="Επιλέξτε Περιφερειακή Ενότητα..."
             appendTo="body"
             fluid
+            class="whitespace-nowrap overflow-hidden text-ellipsis max-w-100"
+            [showClear]="true"
             [filter]="true"
             [options]="regionalUnitOptions()"
             [(ngModel)]="regionalUnit"
@@ -26,19 +28,17 @@
       <p-step>Δημοτική Ενότητα</p-step>
       <p-step-panel>
         <ng-template #content let-activateCallback="activateCallback">
-          <div class="flex flex-col">
-            <p-multiSelect
-              placeholder="Επιλέξτε Δημοτική Ενότητα..."
-              display="chip"
-              appendTo="body"
-              fluid
-              [filter]="true"
-              [showClear]="true"
-              [disabled]="!filters().regionalUnit"
-              [options]="municipalUnitOptions()"
-              [(ngModel)]="municipalUnits"
-            />
-          </div>
+          <p-multiSelect
+            placeholder="Επιλέξτε Δημοτική Ενότητα..."
+            display="chip"
+            appendTo="body"
+            fluid
+            [filter]="true"
+            [showClear]="true"
+            [disabled]="!filters().regionalUnit"
+            [options]="municipalUnitOptions()"
+            [(ngModel)]="municipalUnits"
+          />
           <div class="py-6">
             <p-button severity="secondary" class="mr-2" (click)="goBack()">Πίσω</p-button>
           </div>
