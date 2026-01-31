@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:prod": "ng build --configuration production --base-href /greek-schools/ --deploy-url /greek-schools/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
