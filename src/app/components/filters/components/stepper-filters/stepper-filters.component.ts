@@ -31,6 +31,22 @@ export class StepperFiltersComponent {
     return pickUniqueSorted(base, 'municipal_unit');
   });
 
+  get regionalUnit(): string | null {
+    return this.filters().regionalUnit;
+  }
+
+  set regionalUnit(regionalUnit: string | null) {
+    this.store.updateStepperFilters({ regionalUnit });
+  }
+
+  get municipalUnits(): string[] {
+    return this.filters().municipalUnits;
+  }
+
+  set municipalUnits(municipalUnits: string[]) {
+    this.store.updateStepperFilters({ municipalUnits });
+  }
+
   goNext() {
     if (this.filters().regionalUnit) {
       this.activeStep.set(2);
@@ -39,13 +55,5 @@ export class StepperFiltersComponent {
 
   goBack() {
     this.activeStep.set(1);
-  }
-
-  setRegional(regionalUnit: string | null) {
-    this.store.updateStepperFilters({ regionalUnit });
-  }
-
-  setMunicipals(municipalUnits: string[]) {
-    this.store.updateStepperFilters({ municipalUnits });
   }
 }

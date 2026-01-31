@@ -10,8 +10,7 @@
                 placeholder="Επιλέξτε Περιφερειακή Ενότητα..."
                 [filter]="true"
                 [options]="regionalUnitOptions()"
-                [ngModel]="filters().regionalUnit"
-                (ngModelChange)="setRegional($event)"
+                [(ngModel)]="regionalUnit"
               />
             </div>
             <div class="py-6">
@@ -31,15 +30,13 @@
             <div class="flex flex-col">
               <p-multiSelect
                 placeholder="Επιλέξτε Δημοτική Ενότητα..."
-                class="w-full"
                 display="chip"
                 [filter]="true"
                 [showClear]="true"
                 [disabled]="!filters().regionalUnit"
                 [options]="municipalUnitOptions()"
-                [ngModel]="filters().municipalUnits"
-                (ngModelChange)="setMunicipals($event)"
-              ></p-multiSelect>
+                [(ngModel)]="municipalUnits"
+              />
             </div>
             <div class="py-6">
               <p-button severity="secondary" class="mr-2" (click)="goBack()">Πίσω</p-button>
