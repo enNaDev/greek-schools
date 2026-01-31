@@ -5,7 +5,12 @@
     [schools]="schools()"
     [filters]="stepperFilters()"
     (filtersChange)="updateStepperFilters($event)"
-    (clear)="clearStepperFilters()"
+  />
+
+  <app-filter-summary
+    [filters]="stepperFilters()"
+    (filtersChange)="updateStepperFilters($event)"
+    (clearStepperFilters)="clearStepperFilters()"
   />
 
   <app-school-list

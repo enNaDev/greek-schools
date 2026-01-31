@@ -10,6 +10,7 @@ import { MetaDataComponent } from './components/metadata/metadata.component';
 import { SchoolListComponent } from './components/school-list/school-list.component';
 import { MetaData, School, SchoolListService } from './services/school-list.service';
 import { DEFAULT_STEPPER_FILTERS, StepperFilters } from './components/filters/models';
+import { FilterSummaryComponent } from './components/filters/components/filter-summary/filter-summary.component';
 
 type MetaDataFields = MetaData['fields'];
 
@@ -21,7 +22,12 @@ interface Field {
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  imports: [MetaDataComponent, SchoolListComponent, StepperFiltersComponent],
+  imports: [
+    MetaDataComponent,
+    SchoolListComponent,
+    StepperFiltersComponent,
+    FilterSummaryComponent,
+  ],
 })
 export class AppComponent implements OnInit {
   private readonly schoolListService = inject(SchoolListService);

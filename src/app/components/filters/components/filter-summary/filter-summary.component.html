@@ -1,0 +1,30 @@
+@if (filters().regionalUnit; as selectedRegionalUnit) {
+  <p-card header="Ενεργά φίλτρα">
+    <div class="flex flex-col gap-2">
+      <span class="text-sm">
+        Περιφ. Ενότητα:
+        <p-chip
+          class="ml-2"
+          [label]="selectedRegionalUnit"
+          [removable]="true"
+          (onRemove)="clearFilters()"
+        />
+      </span>
+
+      @if (filters().municipalUnits.length > 0) {
+        <span class="text-sm flex flex-wrap gap-2">
+          Δημοτ. Ενότητα:
+          @for (item of filters().municipalUnits; track item) {
+            <p-chip [label]="item" [removable]="true" (onRemove)="removeMunicipalUnit(item)" />
+          }
+        </span>
+      }
+    </div>
+
+    <ng-template #footer>
+      <div class="flex justify-end">
+        <p-button (click)="clearFilters()">Καραθαρισμός</p-button>
+      </div>
+    </ng-template>
+  </p-card>
+}

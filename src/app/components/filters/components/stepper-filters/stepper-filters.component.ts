@@ -2,7 +2,6 @@ import { Component, computed, effect, input, output, signal } from '@angular/cor
 import { FormsModule } from '@angular/forms';
 import { Button } from 'primeng/button';
 import { Card } from 'primeng/card';
-import { Chip } from 'primeng/chip';
 import { MultiSelect } from 'primeng/multiselect';
 import { Select } from 'primeng/select';
 import { StepperModule } from 'primeng/stepper';
@@ -16,17 +15,13 @@ type GreekLocale = 'el' | 'en';
 @Component({
   selector: 'app-stepper-filters',
   templateUrl: './stepper-filters.component.html',
-  imports: [FormsModule, TableModule, MultiSelect, Card, StepperModule, Button, Chip, Select],
+  imports: [FormsModule, TableModule, MultiSelect, Card, StepperModule, Button, Select],
 })
 export class StepperFiltersComponent {
   readonly schools = input.required<School[]>();
   readonly filters = input.required<StepperFilters>();
-
   readonly filtersChange = output<Partial<StepperFilters>>();
-  readonly clear = output<void>();
-
   readonly activeStep = signal(1);
-
   readonly regionalUnitOptions = computed(() =>
     this.pickUniqueSorted(this.schools(), 'regional_unit'),
   );
@@ -59,19 +54,6 @@ export class StepperFiltersComponent {
 
   setMunicipals(units: string[]) {
     this.filtersChange.emit({ municipalUnits: units ?? [] });
-  }
-
-  removeRegionalUnit() {
-    this.setRegional(null);
-  }
-
-  removeMunicipalUnit(value: string) {
-    const next = this.filters().municipalUnits.filter((x) => x !== value);
-    this.filtersChange.emit({ municipalUnits: next });
-  }
-
-  clearStepperFilters() {
-    this.clear.emit();
   }
 
   private pickUniqueSorted(list: School[], key: SchoolKey, locale: GreekLocale = 'el'): string[] {
