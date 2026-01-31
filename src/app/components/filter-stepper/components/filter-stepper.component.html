@@ -2,26 +2,29 @@
   <p-card>
     <p-stepper [value]="activeStep()">
       <p-step-item [value]="1">
-      <p-step>Περιφερειακή Ενότητα</p-step>
-      <p-step-panel>
-        <ng-template #content let-activateCallback="activateCallback">
-          <div class="flex flex-col">
-            <p-select
-              placeholder="Επιλέξτε Περιφερειακή Ενότητα..."
-              class="w-full"
-              [filter]="true"
-              [options]="regionalUnitOptions()"
-              [ngModel]="filters().regionalUnit"
-              (ngModelChange)="setRegional($event)"
-            ></p-select>
-          </div>
-          <div class="py-6">
-            <p-button label="Next" [disabled]="!filters().regionalUnit" (onClick)="goNext()" />
-          </div>
-        </ng-template>
-      </p-step-panel>
-    </p-step-item>
-    <p-step-item [value]="2">
+        <p-step>Περιφερειακή Ενότητα</p-step>
+        <p-step-panel>
+          <ng-template #content let-activateCallback="activateCallback">
+            <div class="flex flex-col">
+              <p-select
+                placeholder="Επιλέξτε Περιφερειακή Ενότητα..."
+                [filter]="true"
+                [options]="regionalUnitOptions()"
+                [ngModel]="filters().regionalUnit"
+                (ngModelChange)="setRegional($event)"
+              />
+            </div>
+            <div class="py-6">
+              <p-button
+                label="Next"
+                [disabled]="!filters().regionalUnit"
+                (onClick)="goNext()"
+              />
+            </div>
+          </ng-template>
+        </p-step-panel>
+      </p-step-item>
+      <p-step-item [value]="2">
         <p-step>Δημοτική Ενότητα</p-step>
         <p-step-panel>
           <ng-template #content let-activateCallback="activateCallback">
