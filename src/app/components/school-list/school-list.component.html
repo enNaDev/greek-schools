@@ -13,10 +13,6 @@
     >
       <ng-template #caption>
         <div class="flex align-center gap-2">
-          <div>
-            Αποτελέσματα: {{ (dt2.filteredValue?.length ?? schools().length) }} από {{ schools().length }}
-          </div>
-    
           <!-- Column toggle -->
           <p-multiSelect
             class="ml-auto"
@@ -97,10 +93,16 @@
           </tr>
         }
       </ng-template>
+
+      <ng-template #footer>
+        <tr>
+          <td [attr.colspan]="columnToggleOptions().length">Αποτελέσματα: {{ (dt2.filteredValue?.length ?? schools().length) }} από {{ schools().length }}</td>
+        </tr>
+      </ng-template>
     
       <ng-template #emptymessage>
         <tr>
-          <td [attr.colspan]="visibleFields().length + 1">Δεν βρέθηκαν σχολεία.</td>
+          <td class="w-full" [attr.colspan]="visibleFields().length + 1">Δεν βρέθηκαν σχολεία.</td>
         </tr>
       </ng-template>
     </p-table>
