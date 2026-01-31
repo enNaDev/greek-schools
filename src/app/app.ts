@@ -1,16 +1,15 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { finalize, forkJoin, tap } from 'rxjs';
-import { FilterStepper } from './components/filter-stepper/components/filter-stepper.component';
+import { StepperFiltersComponent } from './components/filters/components/stepper-filters/stepper-filters.component';
 import {
   applyStepperFilters,
   cascadeStepperFilters,
-  DEFAULT_STEPPER_FILTERS,
   sanitizeStepperFilters,
-  StepperFilters,
-} from './components/filter-stepper/utils/stepper-filters';
+} from './components/filters/utils/stepper-filters.utils';
 import { MetaDataComponent } from './components/metadata/metadata';
 import { SchoolList } from './components/school-list/school-list';
 import { MetaData, School, SchoolListService } from './services/school-list.service';
+import { DEFAULT_STEPPER_FILTERS, StepperFilters } from './components/filters/models';
 
 type MetaDataFields = MetaData['fields'];
 
@@ -22,7 +21,7 @@ interface Field {
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
-  imports: [MetaDataComponent, SchoolList, FilterStepper],
+  imports: [MetaDataComponent, SchoolList, StepperFiltersComponent],
 })
 export class App implements OnInit {
   private readonly schoolListService = inject(SchoolListService);

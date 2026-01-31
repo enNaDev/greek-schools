@@ -1,14 +1,5 @@
 import { School } from "../../../services/school-list.service";
-
-export interface StepperFilters {
-  regionalUnit: string | null;
-  municipalUnits: string[];
-}
-
-export const DEFAULT_STEPPER_FILTERS: StepperFilters = {
-  regionalUnit: null,
-  municipalUnits: [],
-};
+import { StepperFilters } from "../models";
 
 export function normalize(value: unknown): string {
   return String(value ?? '').trim();

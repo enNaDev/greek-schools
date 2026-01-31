@@ -7,18 +7,18 @@ import { MultiSelect } from 'primeng/multiselect';
 import { Select } from 'primeng/select';
 import { StepperModule } from 'primeng/stepper';
 import { TableModule } from 'primeng/table';
-import { School } from '../../../services/school-list.service';
-import { StepperFilters } from '../utils/stepper-filters';
+import { School } from '../../../../services/school-list.service';
+import { StepperFilters } from '../../models';
 
 type SchoolKey = Extract<keyof School, string>;
 type GreekLocale = 'el' | 'en';
 
 @Component({
-  selector: 'app-filter-stepper',
-  templateUrl: './filter-stepper.component.html',
+  selector: 'app-stepper-filters',
+  templateUrl: './stepper-filters.component.html',
   imports: [FormsModule, TableModule, MultiSelect, Card, StepperModule, Button, Chip, Select],
 })
-export class FilterStepper {
+export class StepperFiltersComponent {
   readonly schools = input.required<School[]>();
   readonly filters = input.required<StepperFilters>();
 
