@@ -3,12 +3,12 @@ export interface TableFilterColumn {
   values: string[];
 }
 
-export interface TableFiltersState {
+export interface TableFilters {
   globalSearch: string;
   columns: TableFilterColumn[];
 }
 
-export const DEFAULT_TABLE_FILTERS: TableFiltersState = {
+export const DEFAULT_TABLE_FILTERS: TableFilters = {
   globalSearch: '',
   columns: [],
 };
