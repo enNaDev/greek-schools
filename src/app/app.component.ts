@@ -9,7 +9,7 @@ import {
 import { MetaDataComponent } from './components/metadata/metadata.component';
 import { SchoolListComponent } from './components/school-list/school-list.component';
 import { MetaData, School, SchoolListService } from './services/school-list.service';
-import { DEFAULT_STEPPER_FILTERS, StepperFilters } from './components/filters/models';
+import { DEFAULT_FILTERS, Filters, StepperFilters } from './components/filters/models';
 import { FilterSummaryComponent } from './components/filters/components/filter-summary/filter-summary.component';
 
 type MetaDataFields = MetaData['fields'];
@@ -36,7 +36,7 @@ export class AppComponent implements OnInit {
   readonly schools = signal<School[]>([]);
   readonly loading = signal(true);
 
-  readonly stepperFilters = signal<StepperFilters>(DEFAULT_STEPPER_FILTERS);
+  readonly filters = signal<Filters>(DEFAULT_FILTERS);
 
   readonly fields = computed<Field[]>(() => {
     const metaData = this.metaData();
@@ -45,7 +45,7 @@ export class AppComponent implements OnInit {
   });
 
   readonly stepperFilteredSchools = computed(() =>
-    applyStepperFilters(this.schools(), this.stepperFilters()),
+    applyStepperFilters(this.schools(), this.filters().stepperFilters),
   );
 
   ngOnInit() {
@@ -64,14 +64,16 @@ export class AppComponent implements OnInit {
   }
 
   updateStepperFilters(patch: Partial<StepperFilters>) {
-    this.stepperFilters.update((prev) => {
-      const next = sanitizeStepperFilters({ ...prev, ...patch });
-      return cascadeStepperFilters(prev, next);
-    });
+    const current = this.filters();
+    const prev = current.stepperFilters;
+    const next = sanitizeStepperFilters({ ...prev, ...patch });
+    const cascaded = cascadeStepperFilters(prev, next);
+    this.filters.set({ ...current, stepperFilters: cascaded });
   }
 
   clearStepperFilters() {
-    this.stepperFilters.set(DEFAULT_STEPPER_FILTERS);
+    const current = this.filters();
+    this.filters.set({ ...current, stepperFilters: DEFAULT_FILTERS.stepperFilters });
   }
 
   private mapMetadataFields(fields: MetaDataFields): Field[] {

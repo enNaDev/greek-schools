@@ -3,12 +3,12 @@
 
   <app-stepper-filters
     [schools]="schools()"
-    [filters]="stepperFilters()"
+    [filters]="filters().stepperFilters"
     (filtersChange)="updateStepperFilters($event)"
   />
 
   <app-filter-summary
-    [filters]="stepperFilters()"
+    [filters]="filters().stepperFilters"
     (filtersChange)="updateStepperFilters($event)"
     (clearStepperFilters)="clearStepperFilters()"
   />
