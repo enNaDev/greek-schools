@@ -81,6 +81,8 @@ export class AppComponent implements OnInit {
       'regional_unit',
       'municipal_unit',
       'district',
+      'municipality',
+      'area',
       'lat',
       'lng',
     ]);
