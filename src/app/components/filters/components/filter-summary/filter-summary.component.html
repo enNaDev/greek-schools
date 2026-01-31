@@ -1,5 +1,5 @@
-@if (filters().regionalUnit; as selectedRegionalUnit) {
-  <p-card header="Ενεργά φίλτρα">
+<p-card header="Ενεργά φίλτρα" class="h-full">
+    @if (filters().regionalUnit; as selectedRegionalUnit) {
     <div class="flex flex-col gap-2">
       <span class="text-sm">
         Περιφ. Ενότητα:
@@ -26,5 +26,5 @@
         <p-button (click)="clearFilters()">Καραθαρισμός</p-button>
       </div>
     </ng-template>
-  </p-card>
-}
+  }
+</p-card>

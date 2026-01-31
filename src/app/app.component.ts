@@ -1,13 +1,12 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { finalize, forkJoin, tap } from 'rxjs';
+import { FilterSummaryComponent } from './components/filters/components/filter-summary/filter-summary.component';
 import { StepperFiltersComponent } from './components/filters/components/stepper-filters/stepper-filters.component';
+import { FiltersStore } from './components/filters/state/filters.store';
 import { applyStepperFilters } from './components/filters/utils/stepper-filters.utils';
 import { MetaDataComponent } from './components/metadata/metadata.component';
 import { SchoolListComponent } from './components/school-list/school-list.component';
 import { MetaData, School, SchoolListService } from './services/school-list.service';
-import { StepperFilters } from './components/filters/models';
-import { FilterSummaryComponent } from './components/filters/components/filter-summary/filter-summary.component';
-import { FiltersStore } from './components/filters/state/filters.store';
 
 type MetaDataFields = MetaData['fields'];
 

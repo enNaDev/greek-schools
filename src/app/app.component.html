@@ -1,9 +1,10 @@
 <div class="p-8 flex flex-col gap-3">
   <app-metadata [metaData]="metaData()" />
 
-  <app-stepper-filters [schools]="schools()" />
-
-  <app-filter-summary />
+  <section class="flex gap-2">
+    <app-stepper-filters class="w-2/5" [schools]="schools()" />
+    <app-filter-summary class="w-3/5" />
+  </section>
 
   <app-school-list
     [metaData]="metaData()"
