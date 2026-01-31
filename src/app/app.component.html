@@ -1,17 +1,9 @@
 <div class="p-8 flex flex-col gap-3">
   <app-metadata [metaData]="metaData()" />
 
-  <app-stepper-filters
-    [schools]="schools()"
-    [filters]="filters().stepperFilters"
-    (filtersChange)="updateStepperFilters($event)"
-  />
+  <app-stepper-filters [schools]="schools()" />
 
-  <app-filter-summary
-    [filters]="filters().stepperFilters"
-    (filtersChange)="updateStepperFilters($event)"
-    (clearStepperFilters)="clearStepperFilters()"
-  />
+  <app-filter-summary />
 
   <app-school-list
     [metaData]="metaData()"

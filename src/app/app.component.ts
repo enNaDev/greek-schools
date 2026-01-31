@@ -1,16 +1,13 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { finalize, forkJoin, tap } from 'rxjs';
 import { StepperFiltersComponent } from './components/filters/components/stepper-filters/stepper-filters.component';
-import {
-  applyStepperFilters,
-  cascadeStepperFilters,
-  sanitizeStepperFilters,
-} from './components/filters/utils/stepper-filters.utils';
+import { applyStepperFilters } from './components/filters/utils/stepper-filters.utils';
 import { MetaDataComponent } from './components/metadata/metadata.component';
 import { SchoolListComponent } from './components/school-list/school-list.component';
 import { MetaData, School, SchoolListService } from './services/school-list.service';
-import { DEFAULT_FILTERS, Filters, StepperFilters } from './components/filters/models';
+import { StepperFilters } from './components/filters/models';
 import { FilterSummaryComponent } from './components/filters/components/filter-summary/filter-summary.component';
+import { FiltersStore } from './components/filters/state/filters.store';
 
 type MetaDataFields = MetaData['fields'];
 
@@ -31,12 +28,11 @@ interface Field {
 })
 export class AppComponent implements OnInit {
   private readonly schoolListService = inject(SchoolListService);
+  private readonly filtersStore = inject(FiltersStore);
 
   readonly metaData = signal<MetaData | undefined>(undefined);
   readonly schools = signal<School[]>([]);
   readonly loading = signal(true);
-
-  readonly filters = signal<Filters>(DEFAULT_FILTERS);
 
   readonly fields = computed<Field[]>(() => {
     const metaData = this.metaData();
@@ -45,7 +41,7 @@ export class AppComponent implements OnInit {
   });
 
   readonly stepperFilteredSchools = computed(() =>
-    applyStepperFilters(this.schools(), this.filters().stepperFilters),
+    applyStepperFilters(this.schools(), this.filtersStore.stepperFilters()),
   );
 
   ngOnInit() {
@@ -61,19 +57,6 @@ export class AppComponent implements OnInit {
         }),
       )
       .subscribe();
-  }
-
-  updateStepperFilters(patch: Partial<StepperFilters>) {
-    const current = this.filters();
-    const prev = current.stepperFilters;
-    const next = sanitizeStepperFilters({ ...prev, ...patch });
-    const cascaded = cascadeStepperFilters(prev, next);
-    this.filters.set({ ...current, stepperFilters: cascaded });
-  }
-
-  clearStepperFilters() {
-    const current = this.filters();
-    this.filters.set({ ...current, stepperFilters: DEFAULT_FILTERS.stepperFilters });
   }
 
   private mapMetadataFields(fields: MetaDataFields): Field[] {

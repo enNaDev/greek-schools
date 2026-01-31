@@ -1,5 +1,9 @@
-import { School } from "../../../services/school-list.service";
-import { StepperFilters } from "../models";
+import { School } from '../../../services/school-list.service';
+import { StepperFilters } from '../models';
+
+// to move them
+type SchoolKey = Extract<keyof School, string>;
+type GreekLocale = 'el' | 'en';
 
 export function normalize(value: unknown): string {
   return String(value ?? '').trim();
@@ -13,18 +17,16 @@ export function applyStepperFilters(schools: School[], f: StepperFilters): Schoo
     return [];
   }
 
-  let list = schools;
-  list = list.filter((s) => normalize(s.regional_unit) === regional);
+  let list = [...schools].filter((s) => normalize(s.regional_unit) === regional);
   const allowed = new Set(municipals);
-  list = list.filter((s) => allowed.has(normalize(s.municipal_unit)));
-
-  return list;
+  return list.filter((s) => allowed.has(normalize(s.municipal_unit)));
 }
 
-export function sanitizeStepperFilters(f: StepperFilters): StepperFilters {
+export function sanitizeStepperFilters(filters: StepperFilters): StepperFilters {
+  const { regionalUnit, municipalUnits } = filters;
   return {
-    regionalUnit: f.regionalUnit ? f.regionalUnit : null,
-    municipalUnits: Array.isArray(f.municipalUnits) ? f.municipalUnits.filter(Boolean) : [],
+    regionalUnit: regionalUnit || null,
+    municipalUnits: Array.isArray(municipalUnits) ? municipalUnits.filter(Boolean) : [],
   };
 }
 
@@ -40,4 +42,17 @@ export function cascadeStepperFilters(prev: StepperFilters, next: StepperFilters
   }
 
   return next;
+}
+
+export function pickUniqueSorted(
+  list: School[],
+  key: SchoolKey,
+  locale: GreekLocale = 'el',
+): string[] {
+  const values = new Set<string>();
+  for (const item of list) {
+    const v = normalize(item[key]);
+    if (v) values.add(v);
+  }
+  return [...values].sort((a, b) => a.localeCompare(b, locale));
 }
