@@ -62,6 +62,7 @@ export class AppComponent implements OnInit {
     const excluded = new Set([
       'prefecture',
       'school_district',
+      'school_type',
       'regional_unit',
       'municipal_unit',
       'district',
