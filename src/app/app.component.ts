@@ -6,8 +6,8 @@ import {
   cascadeStepperFilters,
   sanitizeStepperFilters,
 } from './components/filters/utils/stepper-filters.utils';
-import { MetaDataComponent } from './components/metadata/metadata';
-import { SchoolList } from './components/school-list/school-list';
+import { MetaDataComponent } from './components/metadata/metadata.component';
+import { SchoolListComponent } from './components/school-list/school-list.component';
 import { MetaData, School, SchoolListService } from './services/school-list.service';
 import { DEFAULT_STEPPER_FILTERS, StepperFilters } from './components/filters/models';
 
@@ -20,10 +20,10 @@ interface Field {
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.html',
-  imports: [MetaDataComponent, SchoolList, StepperFiltersComponent],
+  templateUrl: './app.component.html',
+  imports: [MetaDataComponent, SchoolListComponent, StepperFiltersComponent],
 })
-export class App implements OnInit {
+export class AppComponent implements OnInit {
   private readonly schoolListService = inject(SchoolListService);
 
   readonly metaData = signal<MetaData | undefined>(undefined);

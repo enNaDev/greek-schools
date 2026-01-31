@@ -19,11 +19,11 @@ type SchoolKey = Extract<keyof School, string>;
 
 @Component({
   selector: 'app-school-list',
-  templateUrl: './school-list.html',
-  styleUrls: ['./school-list.scss'],
+  templateUrl: './school-list.component.html',
+  styleUrls: ['./school-list.component.scss'],
   imports: [FormsModule, TableModule, IconField, InputIcon, InputText, MultiSelect, Skeleton, Card],
 })
-export class SchoolList {
+export class SchoolListComponent {
   private readonly prefs = inject(TableColumnPreferencesService);
   private readonly storageKey = 'school-list.visible-columns.v1';
 

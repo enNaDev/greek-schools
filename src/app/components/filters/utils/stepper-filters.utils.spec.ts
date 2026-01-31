@@ -1,4 +1,5 @@
-import { applyStepperFilters, StepperFilters } from "./stepper-filters.utils";
+import { StepperFilters } from '../models';
+import { applyStepperFilters } from './stepper-filters.utils';
 
 describe('applyStepperFilters', () => {
   const schools: any[] = [

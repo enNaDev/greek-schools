@@ -5,7 +5,7 @@ import { MetaData } from '../../services/school-list.service';
 
 @Component({
   selector: 'app-metadata',
-  templateUrl: './metadata.html',
+  templateUrl: './metadata.component.html',
   imports: [Card, Tag],
 })
 export class MetaDataComponent {
