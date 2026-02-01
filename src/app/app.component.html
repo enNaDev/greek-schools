@@ -1,15 +1,30 @@
-<div class="p-8 flex flex-col gap-3">
-  <app-metadata [metaData]="metaData()" />
+<div class="p-8">
+  <p-menubar>
+    <ng-template #start>
+  
+    </ng-template>
 
-  <section class="flex gap-2">
-    <app-stepper-filters class="w-2/5" [schools]="schools()" />
-    <app-filter-summary class="w-3/5" />
-  </section>
-
-  <app-school-list
-    [metaData]="metaData()"
-    [fields]="fields()"
-    [schools]="stepperFilteredSchools()"
-    [loading]="loading()"
-  />
+    <ng-template #end>
+      <button type="button" class="btn" (click)="toggleDarkMode()">
+        <i class="pi" [ngClass]="darkMode.isDark() ? 'pi-moon' : 'pi-sun'"
+        ></i>
+      </button>
+    </ng-template>
+  </p-menubar>
+  
+  <div class="p-8 flex flex-col gap-3">
+    <app-metadata [metaData]="metaData()" />
+  
+    <section class="flex gap-2">
+      <app-stepper-filters class="w-2/5" [schools]="schools()" />
+      <app-filter-summary class="w-3/5" />
+    </section>
+  
+    <app-school-list
+      [metaData]="metaData()"
+      [fields]="fields()"
+      [schools]="stepperFilteredSchools()"
+      [loading]="loading()"
+    />
+  </div>
 </div>

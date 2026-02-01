@@ -1,0 +1,14 @@
+.btn {
+  border: 1px solid var(--p-menubar-border-color);
+  width: 2rem;
+  height: 2rem;
+  transition: outline-color .2s, border-color .2s;
+  border-radius: 6px;
+  outline-color: transparent;
+  background-color: var(--card-background);
+  cursor: pointer;
+}
+
+.btn:hover {
+  border-color: var(--p-text-muted-color);
+}

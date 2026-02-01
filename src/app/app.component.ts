@@ -1,4 +1,7 @@
+import { NgClass } from '@angular/common';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Menubar } from 'primeng/menubar';
 import { finalize, forkJoin, tap } from 'rxjs';
 import { FilterSummaryComponent } from './components/filters/components/filter-summary/filter-summary.component';
 import { StepperFiltersComponent } from './components/filters/components/stepper-filters/stepper-filters.component';
@@ -6,6 +9,7 @@ import { FiltersStore } from './components/filters/state/filters.store';
 import { applyStepperFilters } from './components/filters/utils/stepper-filters.utils';
 import { MetaDataComponent } from './components/metadata/metadata.component';
 import { SchoolListComponent } from './components/school-list/school-list.component';
+import { DarkModeService } from './services/dark-mode.service';
 import { MetaData, School, SchoolListService } from './services/school-list.service';
 
 type MetaDataFields = MetaData['fields'];
@@ -18,16 +22,21 @@ interface Field {
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
   imports: [
+    FormsModule,
+    NgClass,
     MetaDataComponent,
     SchoolListComponent,
     StepperFiltersComponent,
     FilterSummaryComponent,
+    Menubar,
   ],
 })
 export class AppComponent implements OnInit {
   private readonly schoolListService = inject(SchoolListService);
   private readonly filtersStore = inject(FiltersStore);
+  readonly darkMode = inject(DarkModeService);
 
   readonly metaData = signal<MetaData | undefined>(undefined);
   readonly schools = signal<School[]>([]);
@@ -56,6 +65,10 @@ export class AppComponent implements OnInit {
         }),
       )
       .subscribe();
+  }
+
+  toggleDarkMode() {
+    this.darkMode.setDark(!this.darkMode.isDark());
   }
 
   private mapMetadataFields(fields: MetaDataFields): Field[] {
