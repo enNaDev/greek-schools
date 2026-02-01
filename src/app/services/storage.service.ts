@@ -16,7 +16,7 @@ export class StorageService {
     try {
       localStorage.setItem(key, JSON.stringify(value));
     } catch {
-      console.log(`could not set the ${key} localStorage item`)
+      console.log(`could not set the ${key} localStorage item`);
     }
   }
 
@@ -24,7 +24,7 @@ export class StorageService {
     try {
       localStorage.removeItem(key);
     } catch {
-      console.log(`could not remove the ${key} localStorage item`)
+      console.log(`could not remove the ${key} localStorage item`);
     }
   }
 

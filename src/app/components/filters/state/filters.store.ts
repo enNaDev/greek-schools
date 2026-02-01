@@ -1,9 +1,6 @@
 import { Injectable, computed, signal } from '@angular/core';
 import { DEFAULT_FILTERS, Filters, StepperFilters } from '../models';
-import {
-  cascadeStepperFilters,
-  sanitizeStepperFilters,
-} from '../utils/stepper-filters.utils';
+import { cascadeStepperFilters, sanitizeStepperFilters } from '../utils/stepper-filters.utils';
 
 @Injectable({ providedIn: 'root' })
 export class FiltersStore {
