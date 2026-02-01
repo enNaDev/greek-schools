@@ -1,18 +1,17 @@
 <div class="p-8">
   <p-menubar>
     <ng-template #start>
-  
+      {{ metaData()?.description ?? '' }}
     </ng-template>
 
     <ng-template #end>
       <button type="button" class="btn" (click)="toggleDarkMode()">
-        <i class="pi" [ngClass]="darkMode.isDark() ? 'pi-moon' : 'pi-sun'"
-        ></i>
+        <i class="pi" [ngClass]="darkMode.isDark() ? 'pi-moon' : 'pi-sun'"></i>
       </button>
     </ng-template>
   </p-menubar>
   
-  <div class="p-8 flex flex-col gap-3">
+  <div class="mt-8 flex flex-col gap-3">
     <app-metadata [metaData]="metaData()" />
   
     <section class="flex gap-2">
