@@ -1,19 +1,18 @@
 @if (metaData(); as metaData) {
   <p-card>
-    <p class="m-0">
+    <div class="flex gap-1 mt-1">
+      Πάροχος πληροφοριών:
+      <p-tag severity="info" [rounded]="true">
+        <a href="https://data.gov.gr/datasets/minedu_schools" pButton target="_blank" rel="noopener noreferrer">
+          <span pButtonLabel>{{ metaData.provider.name }}</span>
+        </a>
+      </p-tag>
+    </div>
+
+    <ng-template #footer>
       @if (lastUpdate(); as lastUpdate) {
         Τελευταία ενημέρωση: {{ lastUpdate }}
       }
-    </p>
-    <ng-template #footer>
-      <div class="flex gap-4 mt-1">
-        Πάροχος πληροφοριών:
-        <p-tag severity="info" [rounded]="true">
-          <a href="https://data.gov.gr/datasets/minedu_schools" pButton target="_blank" rel="noopener noreferrer">
-            <span pButtonLabel>{{ metaData.provider.name }}</span>
-          </a>
-        </p-tag>
-      </div>
     </ng-template>
   </p-card>
 }
